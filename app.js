@@ -31,6 +31,9 @@ function initialize() {
     '', '', '',
     '', '', ''
   ];
+  win = null;
+  turn = 'X';
+  console.log('board reset');
 };
 
 initialize();
@@ -47,14 +50,12 @@ function render() {
   const messages = document.querySelector('h2');
 
   if (win) {
-    document.getElementById('board').removeEventListener('click', handleTurn);
     messages.textContent = win === 'T'
       ? 'It\'s a tie!'
       : `${win} wins the game!`
   } else {
     messages.textContent = `Take your turn ${turn}!`;
   }
-  // messages.textContent = win ? `${win} wins the game! ` : `Take your turn ${turn}!`;
 };
 
 render();
@@ -64,9 +65,11 @@ render();
 
 /* ------ event listeners ----------*/
 document.getElementById('board').addEventListener('click', handleTurn);
+document.querySelector('#restart-button').addEventListener('click', initialize);
 
 /* ------ functions ----------*/
 function handleTurn(event) {
+  if (win) return;
   let index = squares.findIndex(square => {
     return square === event.target;
   });
@@ -91,21 +94,4 @@ function getWinner() {
   return winner ? winner : board.includes('') ? null : 'T';
 }
 
-// todo: use range and map function to create board
-let newGame = () => {
-  // create an empty sheet
-  console.log('create new sheet');
-}
 
-
-
-
-let tie = () => {
-
-}
-
-var entry = document.querySelector('#app');
-entry.style.color = 'red';
-
-var button = document.querySelector('#restart-button');
-button.addEventListener('click', newGame);
