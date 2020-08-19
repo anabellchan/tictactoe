@@ -75,7 +75,6 @@ function getWinner() {
   let winner = null;
   winningVariations.map((variation) => {
     if (board[variation[0]] && board[variation[0]] === board[variation[1]] && board[variation[0]] === board[variation[2]]) {
-      console.log(`there is a winner ${board[variation[0]]}`);
       winner = board[variation[0]];
     }
   });
