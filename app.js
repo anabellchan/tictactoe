@@ -45,8 +45,16 @@ function render() {
   });
 
   const messages = document.querySelector('h2');
-  console.log(win);
-  messages.textContent = win ? `${win} wins the game! ` : `Take your turn ${turn}!`;
+
+  if (win) {
+    document.getElementById('board').removeEventListener('click', handleTurn);
+    messages.textContent = win === 'T'
+      ? 'It\'s a tie!'
+      : `${win} wins the game!`
+  } else {
+    messages.textContent = `Take your turn ${turn}!`;
+  }
+  // messages.textContent = win ? `${win} wins the game! ` : `Take your turn ${turn}!`;
 };
 
 render();
@@ -80,7 +88,7 @@ function getWinner() {
     }
   });
 
-  return winner;
+  return winner ? winner : board.includes('') ? null : 'T';
 }
 
 // todo: use range and map function to create board
