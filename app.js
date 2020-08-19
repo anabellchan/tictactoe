@@ -1,14 +1,7 @@
-/*
-3 x 3 grid
-Make Your Mark
-Take Turns
-“X” and “O”
-Win Logic: align 3 in a row, in a column, or diagonally
-Declare a Tie
-The Game is Finished
-*/
+/*----------- App state ----------*/
 
-/* ------constants ----------*/
+const messages = document.querySelector('h2');
+const squares = Array.from(document.querySelectorAll('#board div'));
 const winningVariations = [
   [0, 1, 2],
   [3, 4, 5],
@@ -19,11 +12,20 @@ const winningVariations = [
   [0, 4, 8],
   [2, 4, 6]
 ];
-
-/* ------ app state (variables) ----------*/
 let board;
 let turn = 'X';
 let win;
+
+initialize();
+render();
+
+/* ----------- event listeners ----------*/
+
+document.getElementById('board').addEventListener('click', handleTurn);
+document.querySelector('#reset-button').addEventListener('click', resetBoard);
+
+
+/* ------------ functions ----------*/
 
 function initialize() {
   board = [
@@ -31,67 +33,51 @@ function initialize() {
     '', '', '',
     '', '', ''
   ];
-  win = null;
-  turn = 'X';
-  console.log('board reset');
 };
 
-initialize();
+function resetBoard() {
+  win = null;
+  turn = 'X';
+  initialize();
+  render();
+  console.log(board);
+  messages.style.background = 'none';
+}
 
-const squares = Array.from(document.querySelectorAll('#board div'));
-
-// make your mark
 function render() {
-  board.forEach((mark, index) => {
-    // console.log('render', mark);
-    squares[index].textContent = mark;
+  board.forEach((text, index) => {
+    squares[index].textContent = text;
   });
-
-  const messages = document.querySelector('h2');
 
   if (win) {
     messages.textContent = win === 'T'
       ? 'It\'s a tie!'
       : `${win} wins the game!`
+    messages.style.backgroundColor = 'yellow';
   } else {
     messages.textContent = `Take your turn ${turn}!`;
   }
 };
 
-render();
-
-
-/* ------ cached element references ----------*/
-
-/* ------ event listeners ----------*/
-document.getElementById('board').addEventListener('click', handleTurn);
-document.querySelector('#restart-button').addEventListener('click', initialize);
-
-/* ------ functions ----------*/
 function handleTurn(event) {
   if (win) return;
   let index = squares.findIndex(square => {
     return square === event.target;
   });
-
   board[index] = turn;
   win = getWinner();
-
   turn = turn === 'X' ? 'O' : 'X';
   render();
 }
 
 function getWinner() {
   let winner = null;
-
   winningVariations.map((variation) => {
     if (board[variation[0]] && board[variation[0]] === board[variation[1]] && board[variation[0]] === board[variation[2]]) {
       console.log(`there is a winner ${board[variation[0]]}`);
       winner = board[variation[0]];
     }
   });
-
   return winner ? winner : board.includes('') ? null : 'T';
 }
-
 
