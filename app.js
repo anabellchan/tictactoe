@@ -64,6 +64,7 @@ function handleTurn(event) {
   let index = squares.findIndex(square => {
     return square === event.target;
   });
+  if (board[index]) return;
   board[index] = turn;
   win = getWinner();
   turn = turn === 'X' ? 'O' : 'X';
